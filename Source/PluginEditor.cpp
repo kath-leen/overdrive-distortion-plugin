@@ -25,8 +25,7 @@ EffectComponent::EffectComponent(const String& componentName, std::vector<Slider
         sliderPtr->setRange(sliderValues[i].startValue, sliderValues[i].stopValue, sliderValues[i].intervalValue);
         sliderPtr->setValue(sliderValues[i].defaultValue);
         sliderPtr->setTextValueSuffix (sliderValues[i].suffix);
-        //sliderPtr->setColour(Slider::thumbColourId, Colours::white);
-        //sliderPtr->setColour(Slider::trackColourId, Colours::lightgrey);
+        sliderPtr->setTextBoxStyle(Slider::TextEntryBoxPosition::TextBoxLeft, true, 40, 20);
         sliderPtr->addListener(sliderValues[i].listener);
         
         sliderLabelMap[sliderValues[i].sliderName] = std::make_shared<Label>();
@@ -35,14 +34,13 @@ EffectComponent::EffectComponent(const String& componentName, std::vector<Slider
         addAndMakeVisible(*labelPtr);
         labelPtr->setFont(Font(14.0f));
         labelPtr->setText (sliderValues[i].sliderName, dontSendNotification);
-        labelPtr->setColour(Label::textColourId, Colours::whitesmoke);
-        labelPtr->attachToComponent(sliderPtr, true);
+        labelPtr->attachToComponent(sliderPtr, false);
+        labelPtr->setJustificationType(Justification::bottomRight);
     }
     
     addAndMakeVisible(nameLabel);
     nameLabel.setFont(Font(18.0f));
     nameLabel.setText(effectName, dontSendNotification);
-    //nameLabel.setColour(Label::textColourId, Colours::whitesmoke);
     nameLabel.setJustificationType(Justification::centred);
 }
 
@@ -59,7 +57,7 @@ void EffectComponent::resized()
     int sideGap = 10;
     nameLabel.setBounds(sideGap, sideGap, r.getWidth() - 2*sideGap, 2*sideGap);
     
-    int sliderHeightGap = 20;
+    int sliderHeightGap = 30;
     double startingPoint = r.getHeight()/2 - sliderHeightGap/2 - (sliderHeightGap/2) * (sliderMap.size() - 1);
     for (std::map<String, std::shared_ptr<Slider>>::iterator it = sliderMap.begin(); it != sliderMap.end(); ++it)
     {
@@ -120,9 +118,13 @@ DistortionOverdrivePluginAudioProcessorEditor::DistortionOverdrivePluginAudioPro
     drywetSlider.setValue(50);
     drywetSlider.setTextValueSuffix("%");
     drywetSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::TextBoxAbove, true, 40, 20);
-    //drywetSlider.setColour(Slider::thumbColourId, Colours::white);
-    //drywetSlider.setColour(Slider::trackColourId, Colours::lightgrey);
     drywetSlider.onValueChange = [this] {processor.ChangeMixingLevel((float)drywetSlider.getValue() / 100.0f);};
+    
+    //set dry/wet label (it is not attached to the slider because it must be under the slider)
+    addAndMakeVisible(drywetLabel);
+    drywetLabel.setFont(Font(14.0f));
+    drywetLabel.setText("Dry/Wet", dontSendNotification);
+    drywetLabel.setJustificationType(Justification::centredTop);
     
     //default parameters setting
     SetDefaultParameters();
@@ -157,7 +159,9 @@ void DistortionOverdrivePluginAudioProcessorEditor::resized()
     isOverdriveButton.setBounds (getWidth()/2 - effectTypeButtonShift, gap * 3, effectTypeButtonShift * 2, 40);
     
     auto rotateSliderRadius = getWidth()*0.12f;
-    drywetSlider.setBounds(getWidth()/2 - rotateSliderRadius, getHeight() - rotateSliderRadius * 2.2f, rotateSliderRadius * 2, rotateSliderRadius * 2);
+    float bottomShift = 0.3f;
+    drywetSlider.setBounds(getWidth()/2 - rotateSliderRadius, getHeight() - rotateSliderRadius * (2 + bottomShift), rotateSliderRadius * 2, rotateSliderRadius * 2);
+    drywetLabel.setBounds(getWidth()/2 - rotateSliderRadius, getHeight() - rotateSliderRadius * (1.7f * bottomShift), rotateSliderRadius * 2, rotateSliderRadius * (1.7f * bottomShift));
 }
 
 void DistortionOverdrivePluginAudioProcessorEditor::ChangeTypeOfEffect()

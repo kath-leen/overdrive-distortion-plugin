@@ -120,6 +120,7 @@ private:
     EffectComponent* DistortionComponent;
     ImageButton isOverdriveButton;
     Slider drywetSlider;
+    Label drywetLabel;
     
     bool isOverdrive;
 
