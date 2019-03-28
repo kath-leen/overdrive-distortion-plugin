@@ -88,8 +88,8 @@ int EffectComponent::ExtractSliderIdx(Slider* sliderPtr)
 DistortionOverdrivePluginAudioProcessorEditor::DistortionOverdrivePluginAudioProcessorEditor (DistortionOverdrivePluginAudioProcessor& p) :
         AudioProcessorEditor (&p),
         processor (p),
-        sliderOverdrive({SliderInitValues("Overdrive Level", this, 0, 0.5, 0.01, 0.5)}),
-        sliderDistortion({SliderInitValues("Distortion Level", this, 1, 30, 0.1)}),
+        sliderOverdrive({SliderInitValues("Overdrive Level", this, 0.01, 0.5, 0.01, 0.5)}),
+        sliderDistortion({SliderInitValues("Distortion Level", this, 1, 50, 0.1, 1)}),
 //        buttonProps(ImageCache::getFromFile(File ("/Users/kathleen/Documents/JuceProjects/DistortionOverdrivePlugin/Images/toggle-dist.png")), ImageCache::getFromFile(File ("/Users/kathleen/Documents/JuceProjects/DistortionOverdrivePlugin/Images/toggle-overdr.png"))),
         buttonProps(2),
         isOverdriveButton("effectTypeButton"),
