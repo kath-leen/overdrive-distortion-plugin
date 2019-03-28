@@ -181,7 +181,7 @@ void DistortionOverdrivePluginAudioProcessor::processOverdriveBlock (AudioBuffer
                     processedSample = ((channelData[j] > 0) ? 1 : -1) * ((3 - std::pow((2 - std::abs(channelData[j])*3), 2)) / 3.0);
                 else
                     processedSample = (channelData[j] > 0) ? 1 : -1;
-            processedSample *= std::sqrt(overdriveParameter * 2); // level compensation (euristics)
+            processedSample *= std::sqrt(overdriveParameter * 2); // level compensation (heuristics)
             channelData[j] = processedSample * mixingLevel + channelData[j] * (1.0 - mixingLevel);
         }
     }
@@ -202,7 +202,7 @@ void DistortionOverdrivePluginAudioProcessor::processDistortionBlock (AudioBuffe
         for (auto j = 0; j < blockLength; ++j)
         {
             processedSample = ((channelData[j] > 0) ? 1 : -1) * (1 - std::exp(-std::abs(channelData[j] * distortionParameter)));
-            processedSample /= std::sqrt(distortionParameter); // level compensation (euristics)
+            processedSample /= std::sqrt(distortionParameter); // level compensation (heuristics)
             channelData[j] = processedSample * mixingLevel + channelData[j] * (1.0 - mixingLevel);
         }
     }
