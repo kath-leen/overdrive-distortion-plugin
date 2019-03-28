@@ -88,8 +88,8 @@ int EffectComponent::ExtractSliderIdx(Slider* sliderPtr)
 DistortionOverdrivePluginAudioProcessorEditor::DistortionOverdrivePluginAudioProcessorEditor (DistortionOverdrivePluginAudioProcessor& p) :
         AudioProcessorEditor (&p),
         processor (p),
-        sliderOverdrive({SliderInitValues("Overdrive Level", this, 0.01, 0.5, 0.01, 0.5)}),
-        sliderDistortion({SliderInitValues("Distortion Level", this, 1, 50, 0.1, 1)}),
+        sliderOverdrive({SliderInitValues("Overdrive Level", this, 0, 100, 1, 0, "%")}),
+        sliderDistortion({SliderInitValues("Distortion Level", this, 0, 100, 1, 0, "%")}),
 //        buttonProps(ImageCache::getFromFile(File ("/Users/kathleen/Documents/JuceProjects/DistortionOverdrivePlugin/Images/toggle-dist.png")), ImageCache::getFromFile(File ("/Users/kathleen/Documents/JuceProjects/DistortionOverdrivePlugin/Images/toggle-overdr.png"))),
         buttonProps(2),
         isOverdriveButton("effectTypeButton"),
@@ -171,15 +171,15 @@ void DistortionOverdrivePluginAudioProcessorEditor::ChangeTypeOfEffect()
 void DistortionOverdrivePluginAudioProcessorEditor::sliderValueChanged (Slider* slider)
 {
     if (OverdriveComponent->ExtractSliderIdx(slider) != -1)
-        processor.ChangeParameter(true, slider->getValue());
+        processor.ChangeParameter(true, 0.5f - (0.49f * slider->getValue() / 100.0f)); // % -> overdrive level
     if (DistortionComponent->ExtractSliderIdx(slider) != -1)
-        processor.ChangeParameter(false, slider->getValue());
+        processor.ChangeParameter(false, 49 * slider->getValue() / 100 + 1); // % -> distortion threshold
 }
 
 void DistortionOverdrivePluginAudioProcessorEditor::SetDefaultParameters()
 {
     processor.ChangeMixingLevel((float)drywetSlider.getValue() / 100.0f);
     processor.ChangeEffect(isOverdrive);
-    processor.ChangeParameter(true, sliderOverdrive[0].defaultValue);
-    processor.ChangeParameter(false, sliderDistortion[0].defaultValue);
+    processor.ChangeParameter(true, 0.5f - (0.49f * sliderOverdrive[0].defaultValue / 100.0f)); // % -> overdrive level
+    processor.ChangeParameter(false, 49 * sliderDistortion[0].defaultValue / 100 + 1); // % -> distortion threshold
 }
