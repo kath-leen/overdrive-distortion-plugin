@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    This file was auto-generated!
-
-    It contains the basic framework code for a JUCE plugin editor.
-
-  ==============================================================================
-*/
-
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
@@ -40,21 +30,17 @@ struct SliderInitValues
 class EffectComponent : public Component
 {
 public:
-    EffectComponent(const String& componentName, std::vector<SliderInitValues> sliderValues);
+    EffectComponent(const String& componentName, const std::vector<SliderInitValues> sliderValues);
     ~EffectComponent() {};
     
     //===========================================================================
     void paint (Graphics&) override;
     void resized() override;
     
-    double GetSliderValue(String sliderName)
-    {
-        std::shared_ptr<Slider> sl = sliderMap.at(sliderName);
-        return sl->getValue();
-    }
+    double GetSliderValue(const String& sliderName);
     
     // Extracts the index of the corresponding slider from the map. If it is not the member of the map, then returns -1
-    int ExtractSliderIdx(Slider* sliderPtr);
+    String ExtractSliderName(Slider* sliderPtr);
     
 private:
     String effectName;
@@ -70,7 +56,7 @@ class DistortionOverdrivePluginAudioProcessorEditor  : public AudioProcessorEdit
 {
 public:
     DistortionOverdrivePluginAudioProcessorEditor (DistortionOverdrivePluginAudioProcessor&);
-    ~DistortionOverdrivePluginAudioProcessorEditor();
+    ~DistortionOverdrivePluginAudioProcessorEditor() {};
 
     //==============================================================================
     void paint (Graphics&) override;
@@ -78,6 +64,7 @@ public:
     void sliderValueChanged (Slider* slider) override;
 
 private:
+    static const Image EMPTY_IMAGE;
     
     struct ImageButtonProps {
         std::vector<Image> states;
@@ -90,19 +77,7 @@ private:
             jassert(states.size() == statesQuantity);
             currentStateIdx = (currentStateIdx + 1) % statesQuantity;
         };
-        
-//        Image state1; //TODO: multiple states (in case of many effects)
-//        Image state2;
-//        Image* currentState;
-//        bool isState1;
-//        ImageButtonProps(Image&& st1, Image&& st2) : state1(st1), state2(st2), currentState(&st1), isState1(true) {};
-//        void ChangeState()
-//        {
-//            currentState = (isState1) ? &state2 : &state1;
-//            isState1 = !isState1;
-//        }
     };
-    
     
     void ChangeTypeOfEffect();
     
@@ -114,10 +89,10 @@ private:
     std::vector<SliderInitValues> sliderOverdrive;
     std::vector<SliderInitValues> sliderDistortion;
     
-    ImageButtonProps buttonProps;
+    std::unique_ptr<EffectComponent> overdriveComponent;
+    std::unique_ptr<EffectComponent> distortionComponent;
     
-    EffectComponent* OverdriveComponent;
-    EffectComponent* DistortionComponent;
+    ImageButtonProps buttonProps;
     ImageButton isOverdriveButton;
     Slider drywetSlider;
     Label drywetLabel;

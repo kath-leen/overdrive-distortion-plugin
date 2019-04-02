@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    This file was auto-generated!
-
-    It contains the basic framework code for a JUCE plugin processor.
-
-  ==============================================================================
-*/
-
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
@@ -22,6 +12,9 @@ public:
     DistortionOverdrivePluginAudioProcessor();
     ~DistortionOverdrivePluginAudioProcessor();
 
+    //==============================================================================
+    enum Effects {overdrive = 0, distortion};
+    
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
@@ -55,20 +48,13 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
-    void ChangeMixingLevel(float inputLevel) { mixingLevel = inputLevel; };
-    void ChangeEffect(bool isOverdrive) { effect = (isOverdrive == true) ? overdrive : distortion; };
-    void ChangeParameter(bool isOverdrive, float value)
-    {
-        if (isOverdrive)
-            overdriveParameter = value;
-        else
-            distortionParameter = value;
-    };
+    void SetMixingLevel(float inputLevel);
+    void SetEffect(bool isOverdrive);
+    void SetParameter(Effects effect, float value);
     
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DistortionOverdrivePluginAudioProcessor)
-    enum Effects {overdrive = 0, distortion};
     
     void processOverdriveBlock (AudioBuffer<float>& buffer);
     void processDistortionBlock (AudioBuffer<float>& buffer);

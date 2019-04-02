@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    This file was auto-generated!
-
-    It contains the basic framework code for a JUCE plugin processor.
-
-  ==============================================================================
-*/
-
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
@@ -177,10 +167,12 @@ void DistortionOverdrivePluginAudioProcessor::processOverdriveBlock (AudioBuffer
             if (std::abs(channelData[j]) < overdriveParameter)
                 processedSample = channelData[j];
             else
+            {
                 if (std::abs(channelData[j]) < 2*overdriveParameter)
                     processedSample = ((channelData[j] > 0) ? 1 : -1) * ((3 - std::pow((2 - std::abs(channelData[j])*3), 2)) / 3.0);
                 else
                     processedSample = (channelData[j] > 0) ? 1 : -1;
+            }
             processedSample *= std::sqrt(overdriveParameter * 2); // level compensation (heuristics)
             channelData[j] = processedSample * mixingLevel + channelData[j] * (1.0 - mixingLevel);
         }
@@ -240,4 +232,27 @@ void DistortionOverdrivePluginAudioProcessor::setStateInformation (const void* d
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new DistortionOverdrivePluginAudioProcessor();
+}
+
+void DistortionOverdrivePluginAudioProcessor::SetMixingLevel(float inputLevel)
+{
+    mixingLevel = inputLevel;
+}
+
+void DistortionOverdrivePluginAudioProcessor::SetEffect(bool isOverdrive)
+{
+    effect = (isOverdrive == true) ? overdrive : distortion;
+}
+
+void DistortionOverdrivePluginAudioProcessor::SetParameter(Effects effect, float value)
+{
+    switch (effect)
+    {
+    case overdrive:
+        overdriveParameter = value;
+        break;
+    case distortion:
+        distortionParameter = value;
+        break;
+    }
 }
