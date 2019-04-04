@@ -5,6 +5,11 @@
               pluginDesc="Implements distortion or overdrive" pluginCode="dov1"
               companyName="kathleen">
   <MAINGROUP id="Cri3Uj" name="DistortionOverdrivePlugin">
+    <GROUP id="{9803400F-8357-939B-8E0C-38441AF4ADF8}" name="Images">
+      <FILE id="oGIUsf" name="toggle-dist.png" compile="0" resource="1" file="Images/toggle-dist.png"/>
+      <FILE id="SE4oHP" name="toggle-overdr.png" compile="0" resource="1"
+            file="Images/toggle-overdr.png"/>
+    </GROUP>
     <GROUP id="{2D22176E-7518-9257-6A6F-7709FFFDE94F}" name="Source">
       <FILE id="tWOVBS" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>

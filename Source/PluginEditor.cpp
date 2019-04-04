@@ -89,8 +89,8 @@ DistortionOverdrivePluginAudioProcessorEditor::DistortionOverdrivePluginAudioPro
     distortionComponent->toBack();
     
     //update images for the effect button
-    buttonProps.states.push_back(ImageCache::getFromFile(File ("/Images/toggle-overdr.png")));
-    buttonProps.states.push_back(ImageCache::getFromFile(File ("/Images/toggle-dist.png")));
+    buttonProps.states.push_back(ImageCache::getFromMemory(BinaryData::toggledist_png, BinaryData::toggledist_pngSize));
+    buttonProps.states.push_back(ImageCache::getFromMemory(BinaryData::toggleoverdr_png, BinaryData::toggleoverdr_pngSize));
     
     //set the effect button
     addAndMakeVisible(isOverdriveButton);
