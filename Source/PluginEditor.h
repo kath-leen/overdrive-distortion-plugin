@@ -30,8 +30,7 @@ struct SliderInitValues
 class EffectComponent : public Component
 {
 public:
-    EffectComponent(const String& componentName, const std::vector<SliderInitValues> sliderValues);
-    ~EffectComponent() {};
+    EffectComponent(const String& componentName, const std::vector<SliderInitValues>& sliderValues);
     
     //===========================================================================
     void paint (Graphics&) override;
@@ -56,7 +55,6 @@ class DistortionOverdrivePluginAudioProcessorEditor  : public AudioProcessorEdit
 {
 public:
     DistortionOverdrivePluginAudioProcessorEditor (DistortionOverdrivePluginAudioProcessor&);
-    ~DistortionOverdrivePluginAudioProcessorEditor() {};
 
     //==============================================================================
     void paint (Graphics&) override;

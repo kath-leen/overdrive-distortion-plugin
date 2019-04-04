@@ -3,7 +3,7 @@
 
 const Image DistortionOverdrivePluginAudioProcessorEditor::EMPTY_IMAGE = Image();
 
-EffectComponent::EffectComponent(const String& componentName, const std::vector<SliderInitValues> sliderValues) :
+EffectComponent::EffectComponent(const String& componentName, const std::vector<SliderInitValues>& sliderValues) :
     effectName(componentName)
 {
     for (auto i = 0; i < sliderValues.size(); ++i)
@@ -56,16 +56,10 @@ void EffectComponent::resized()
 
 String EffectComponent::ExtractSliderName(Slider* sliderPtr)
 {
-    String outputStr = String();
     for (auto &it : sliderMap)
-    {
         if (it.second.get() == sliderPtr)
-        {
-            outputStr = it.first;
-            break;
-        }
-    }
-    return outputStr;
+            return it.first;
+    return String();
 }
 
 double EffectComponent::GetSliderValue(const String& sliderName)
@@ -89,8 +83,6 @@ DistortionOverdrivePluginAudioProcessorEditor::DistortionOverdrivePluginAudioPro
         isOverdrive(true)
 {
     //add components
-    //overdriveComponent = new EffectComponent("Overdrive", sliderOverdrive);
-    //distortionComponent = new EffectComponent("Distortion", sliderDistortion);
     addAndMakeVisible(*overdriveComponent);
     addAndMakeVisible(*distortionComponent);
     overdriveComponent->toBack();
